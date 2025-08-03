@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { CLOCK_FACES, type ClockFaceType } from '@/lib/clockTypes';
 
@@ -75,26 +76,43 @@ export function ClockFaceSelector({ selectedFace, onFaceChange }: ClockFaceSelec
     <div className="space-y-4">
       <h3 className="text-sm font-semibold text-foreground">Clock Style</h3>
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        {CLOCK_FACES.map(face => (
-          <Button
+        {CLOCK_FACES.map((face, index) => (
+          <motion.div
             key={face.id}
-            variant={selectedFace === face.id ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => onFaceChange(face.id)}
-            className={`flex flex-col h-auto p-4 text-xs transition-all duration-200 ${
-              selectedFace === face.id 
-                ? 'ring-2 ring-ring ring-offset-2 shadow-md' 
-                : 'hover:shadow-sm hover:scale-105'
-            }`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ 
+              duration: 0.3, 
+              delay: index * 0.05,
+              ease: [0.4, 0.0, 0.2, 1]
+            }}
           >
-            <div className="flex items-center justify-center h-8 mb-2">
-              <PreviewIcon face={face.id} />
-            </div>
-            <span className="font-medium">{face.name}</span>
-            <span className="text-xs text-muted-foreground mt-1 text-center leading-tight">
-              {face.description}
-            </span>
-          </Button>
+            <Button
+              variant={selectedFace === face.id ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => onFaceChange(face.id)}
+              className={`flex flex-col h-auto p-4 text-xs transition-all duration-200 ${
+                selectedFace === face.id 
+                  ? 'ring-2 ring-ring ring-offset-2 shadow-md' 
+                  : 'hover:shadow-sm hover:scale-105'
+              }`}
+            >
+              <motion.div 
+                className="flex items-center justify-center h-8 mb-2"
+                whileHover={{ 
+                  scale: 1.1,
+                  transition: { duration: 0.2 }
+                }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <PreviewIcon face={face.id} />
+              </motion.div>
+              <span className="font-medium">{face.name}</span>
+              <span className="text-xs text-muted-foreground mt-1 text-center leading-tight">
+                {face.description}
+              </span>
+            </Button>
+          </motion.div>
         ))}
       </div>
     </div>

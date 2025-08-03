@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ClockFaceType } from '@/lib/clockTypes';
 
 interface AnalogClockProps {
@@ -223,29 +224,48 @@ export function AnalogClock({ time, timezone, clockFace, size = 200 }: AnalogClo
 
   if (clockFace === 'digital') {
     return (
-      <div 
+      <motion.div
+        key="digital-clock"
+        initial={{ opacity: 0, scale: 0.9, rotateY: -10 }}
+        animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+        exit={{ opacity: 0, scale: 0.9, rotateY: 10 }}
+        transition={{ 
+          duration: 0.4, 
+          ease: [0.4, 0.0, 0.2, 1],
+          scale: { type: "spring", stiffness: 300, damping: 25 }
+        }}
         className="flex items-center justify-center bg-gradient-to-br from-card to-muted/20 border-2 rounded-xl shadow-lg backdrop-blur-sm"
         style={{ width: size, height: size }}
       >
         <div className="text-center p-4">
-          <div className="text-4xl font-mono font-bold text-foreground tabular-nums tracking-tight mb-2"
-               style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+          <motion.div 
+            className="text-4xl font-mono font-bold text-foreground tabular-nums tracking-tight mb-2"
+            style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.1, duration: 0.3 }}
+          >
             {timeInZone.toLocaleTimeString('en-US', {
               hour12: false,
               hour: '2-digit',
               minute: '2-digit',
               second: '2-digit'
             })}
-          </div>
-          <div className="text-sm text-muted-foreground font-medium">
+          </motion.div>
+          <motion.div 
+            className="text-sm text-muted-foreground font-medium"
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.3 }}
+          >
             {timeInZone.toLocaleDateString('en-US', {
               weekday: 'short',
               month: 'short',
               day: 'numeric'
             })}
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
@@ -310,13 +330,31 @@ export function AnalogClock({ time, timezone, clockFace, size = 200 }: AnalogClo
   };
 
   return (
-    <div className="relative">
-      <svg width={size} height={size} className="text-foreground">
+    <motion.div 
+      key={`analog-clock-${clockFace}`}
+      className="relative"
+      initial={{ opacity: 0, scale: 0.95, rotateY: -15 }}
+      animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+      exit={{ opacity: 0, scale: 0.95, rotateY: 15 }}
+      transition={{ 
+        duration: 0.5, 
+        ease: [0.4, 0.0, 0.2, 1],
+        scale: { type: "spring", stiffness: 280, damping: 22 }
+      }}
+    >
+      <motion.svg 
+        width={size} 
+        height={size} 
+        className="text-foreground"
+        initial={{ rotate: -5 }}
+        animate={{ rotate: 0 }}
+        transition={{ duration: 0.6, ease: [0.4, 0.0, 0.2, 1] }}
+      >
         {getClockGradient()}
         
         {/* Outer ring for luxury style */}
         {clockFace === 'luxury' && (
-          <circle
+          <motion.circle
             cx={centerX}
             cy={centerY}
             r={radius - 2}
@@ -324,11 +362,14 @@ export function AnalogClock({ time, timezone, clockFace, size = 200 }: AnalogClo
             style={{
               filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.15))'
             }}
+            initial={{ strokeDasharray: "0 1000" }}
+            animate={{ strokeDasharray: "1000 0" }}
+            transition={{ duration: 0.8, ease: "easeInOut", delay: 0.2 }}
           />
         )}
         
         {/* Clock face background */}
-        <circle
+        <motion.circle
           cx={centerX}
           cy={centerY}
           r={radius - (clockFace === 'luxury' ? 8 : 6)}
@@ -339,74 +380,101 @@ export function AnalogClock({ time, timezone, clockFace, size = 200 }: AnalogClo
               'drop-shadow(0 8px 25px rgba(0,0,0,0.15))' : 
               'drop-shadow(0 4px 12px rgba(0,0,0,0.1))'
           }}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.4, ease: [0.4, 0.0, 0.2, 1], delay: 0.1 }}
         />
         
         {/* Inner decorative ring for luxury */}
         {clockFace === 'luxury' && (
-          <circle
+          <motion.circle
             cx={centerX}
             cy={centerY}
             r={radius - 20}
             className="fill-none stroke-border/30 stroke-1"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5, ease: [0.4, 0.0, 0.2, 1], delay: 0.3 }}
           />
         )}
         
-        {/* Hour markers */}
-        {renderHourMarkers()}
+        {/* Hour markers with staggered animation */}
+        <motion.g
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          {renderHourMarkers()}
+        </motion.g>
         
         {/* Clock hands with shadows */}
         {/* Hour hand shadow */}
-        <line
+        <motion.line
           x1={centerX}
           y1={centerY}
           x2={hourX + 1}
           y2={hourY + 1}
           className={handStyles.hourShadow}
           strokeLinecap="round"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ duration: 0.8, ease: [0.4, 0.0, 0.2, 1], delay: 0.4 }}
         />
         
         {/* Minute hand shadow */}
-        <line
+        <motion.line
           x1={centerX}
           y1={centerY}
           x2={minuteX + 1}
           y2={minuteY + 1}
           className={handStyles.minuteShadow}
           strokeLinecap="round"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ duration: 0.8, ease: [0.4, 0.0, 0.2, 1], delay: 0.5 }}
         />
         
         {/* Second hand shadow */}
-        <line
+        <motion.line
           x1={centerX}
           y1={centerY}
           x2={secondX + 0.5}
           y2={secondY + 0.5}
           className={handStyles.secondShadow}
           strokeLinecap="round"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ duration: 0.8, ease: [0.4, 0.0, 0.2, 1], delay: 0.6 }}
         />
         
         {/* Hour hand */}
-        <line
+        <motion.line
           x1={centerX}
           y1={centerY}
           x2={hourX}
           y2={hourY}
           className={handStyles.hour}
           strokeLinecap="round"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ duration: 0.8, ease: [0.4, 0.0, 0.2, 1], delay: 0.4 }}
         />
         
         {/* Minute hand */}
-        <line
+        <motion.line
           x1={centerX}
           y1={centerY}
           x2={minuteX}
           y2={minuteY}
           className={handStyles.minute}
           strokeLinecap="round"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ duration: 0.8, ease: [0.4, 0.0, 0.2, 1], delay: 0.5 }}
         />
         
         {/* Second hand */}
-        <line
+        <motion.line
           x1={centerX}
           y1={centerY}
           x2={secondX}
@@ -416,10 +484,13 @@ export function AnalogClock({ time, timezone, clockFace, size = 200 }: AnalogClo
           style={{
             transition: seconds === 0 ? 'none' : 'transform 0.15s cubic-bezier(0.4, 0.0, 0.2, 1)',
           }}
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ duration: 0.8, ease: [0.4, 0.0, 0.2, 1], delay: 0.6 }}
         />
         
         {/* Center dot with gradient */}
-        <circle
+        <motion.circle
           cx={centerX}
           cy={centerY}
           r={clockFace === 'luxury' ? 6 : clockFace === 'modern' ? 5 : 4}
@@ -427,16 +498,32 @@ export function AnalogClock({ time, timezone, clockFace, size = 200 }: AnalogClo
           style={{
             filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
           }}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ 
+            duration: 0.4, 
+            ease: [0.4, 0.0, 0.2, 1], 
+            delay: 0.7,
+            scale: { type: "spring", stiffness: 400, damping: 20 }
+          }}
         />
         
         {/* Center highlight */}
-        <circle
+        <motion.circle
           cx={centerX - 1}
           cy={centerY - 1}
           r={clockFace === 'luxury' ? 2 : 1.5}
           className="fill-white/60"
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ 
+            duration: 0.3, 
+            ease: [0.4, 0.0, 0.2, 1], 
+            delay: 0.8,
+            scale: { type: "spring", stiffness: 500, damping: 25 }
+          }}
         />
-      </svg>
-    </div>
+      </motion.svg>
+    </motion.div>
   );
 }

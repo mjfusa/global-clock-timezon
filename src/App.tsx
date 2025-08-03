@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Clock } from '@phosphor-icons/react';
+import { AnimatePresence } from 'framer-motion';
 import { useKV } from '@github/spark/hooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AnalogClock } from '@/components/AnalogClock';
@@ -151,24 +152,30 @@ function App() {
           {/* Local Clock */}
           <Card className="text-center">
             <CardContent className="flex justify-center pt-8 pb-8">
-              <AnalogClock
-                time={currentTime}
-                timezone={userTimezone}
-                clockFace={clockFace}
-                size={240}
-              />
+              <AnimatePresence mode="wait">
+                <AnalogClock
+                  key={`local-${clockFace}`}
+                  time={currentTime}
+                  timezone={userTimezone}
+                  clockFace={clockFace}
+                  size={240}
+                />
+              </AnimatePresence>
             </CardContent>
           </Card>
 
           {/* Target Clock */}
           <Card className="text-center">
             <CardContent className="flex justify-center pt-8 pb-8">
-              <AnalogClock
-                time={currentTime}
-                timezone={targetTimezone}
-                clockFace={clockFace}
-                size={240}
-              />
+              <AnimatePresence mode="wait">
+                <AnalogClock
+                  key={`target-${clockFace}`}
+                  time={currentTime}
+                  timezone={targetTimezone}
+                  clockFace={clockFace}
+                  size={240}
+                />
+              </AnimatePresence>
             </CardContent>
           </Card>
         </div>
