@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Download, Check } from '@phosphor-icons/react';
+import { Button } from '@/components/ui/button';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
-/**
- * PWA Install Button Component
- * Handles browser install prompts with elegant UI
  */
-export function InstallButton() {
+  const [deferredPrompt, setDef
+  const [isInstalling, setIsInstalling] = useState
+  u
+    const checkInstalled = () => 
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isInstalling, setIsInstalling] = useState(false);
@@ -78,25 +78,24 @@ export function InstallButton() {
     return null;
   }
 
-  return (
-    <Button
-      onClick={handleInstallClick}
-      disabled={isInstalling}
-      variant="outline"
-      size="sm"
-      className="gap-2 transition-all duration-200 hover:bg-primary hover:text-primary-foreground"
-    >
-      {isInstalling ? (
-        <>
-          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-          Installing...
+      {isI
+          <
         </>
-      ) : (
         <>
-          <Download size={16} />
           Install App
-        </>
       )}
-    </Button>
   );
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
