@@ -8,6 +8,8 @@ import { AnalogClock } from '@/components/AnalogClock';
 import { TimezoneSelect } from '@/components/TimezoneSelect';
 import { ClockFaceSelector } from '@/components/ClockFaceSelector';
 import { PWAManager } from '@/components/PWAManager';
+import { InstallButton } from '@/components/InstallButton';
+import { InstallStatus } from '@/components/InstallStatus';
 import { NetworkStatus } from '@/components/NetworkStatus';
 
 import { getCurrentTimezone, getFormattedTimezoneLabel } from '@/lib/timezone';
@@ -43,9 +45,13 @@ function App() {
             <Clock size={32} className="text-primary" />
             <h1 className="text-3xl font-bold text-foreground">Timezone Converter</h1>
           </div>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground mb-4">
             Compare times across different zones with beautiful clock faces
           </p>
+          <div className="flex items-center justify-center gap-3">
+            <InstallButton />
+            <InstallStatus />
+          </div>
         </div>
 
         {/* Controls */}
