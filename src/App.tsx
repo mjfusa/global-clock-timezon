@@ -11,7 +11,8 @@ import { ClockFaceType } from '@/lib/clockTypes';
 
 function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [userTimezone] = useState(getCurrentTimezone());
+  const detectedTimezone = getCurrentTimezone();
+  const [userTimezone, setUserTimezone] = useKV('user-timezone', detectedTimezone);
   const [targetTimezone, setTargetTimezone] = useKV('target-timezone', 'UTC');
   const [clockFace, setClockFace] = useKV<ClockFaceType>('clock-face', 'classic');
 
@@ -49,9 +50,16 @@ function App() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-sm font-medium text-foreground">
-                  {getFormattedTimezoneLabel(userTimezone)}
-                </div>
+                <TimezoneSelect
+                  value={userTimezone}
+                  onValueChange={setUserTimezone}
+                  placeholder="Choose your timezone..."
+                />
+                {userTimezone !== detectedTimezone && (
+                  <div className="mt-2 text-xs text-muted-foreground">
+                    Detected: {getFormattedTimezoneLabel(detectedTimezone)}
+                  </div>
+                )}
               </CardContent>
             </Card>
             
