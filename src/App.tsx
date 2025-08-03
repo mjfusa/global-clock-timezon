@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Clock } from '@phosphor-icons/react';
+import { Clock, ArrowCounterClockwise } from '@phosphor-icons/react';
 import { AnimatePresence } from 'framer-motion';
 import { useKV } from '@github/spark/hooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { AnalogClock } from '@/components/AnalogClock';
 import { TimezoneSelect } from '@/components/TimezoneSelect';
 import { ClockFaceSelector } from '@/components/ClockFaceSelector';
@@ -50,16 +51,29 @@ function App() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <TimezoneSelect
-                  value={userTimezone}
-                  onValueChange={setUserTimezone}
-                  placeholder="Choose your timezone..."
-                />
-                {userTimezone !== detectedTimezone && (
-                  <div className="mt-2 text-xs text-muted-foreground">
-                    Detected: {getFormattedTimezoneLabel(detectedTimezone)}
-                  </div>
-                )}
+                <div className="space-y-3">
+                  <TimezoneSelect
+                    value={userTimezone}
+                    onValueChange={setUserTimezone}
+                    placeholder="Choose your timezone..."
+                  />
+                  {userTimezone !== detectedTimezone && (
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs text-muted-foreground">
+                        Detected: {getFormattedTimezoneLabel(detectedTimezone)}
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setUserTimezone(detectedTimezone)}
+                        className="h-7 px-2 text-xs"
+                      >
+                        <ArrowCounterClockwise size={12} className="mr-1" />
+                        Reset
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
             
