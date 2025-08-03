@@ -8,7 +8,7 @@ import { AnalogClock } from '@/components/AnalogClock';
 import { TimezoneSelect } from '@/components/TimezoneSelect';
 import { ClockFaceSelector } from '@/components/ClockFaceSelector';
 import { PWAManager } from '@/components/PWAManager';
-import { InstallButton } from '@/components/InstallButton';
+// import { InstallButton } from '@/components/InstallButton';
 import { InstallStatus } from '@/components/InstallStatus';
 import { NetworkStatus } from '@/components/NetworkStatus';
 
