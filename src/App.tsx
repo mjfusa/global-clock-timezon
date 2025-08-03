@@ -81,11 +81,10 @@ function App() {
           </Card>
         </div>
 
-        {/* Clocks */}
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Local Clock */}
-          <Card className="text-center">
-            <CardHeader>
+        {/* Digital Time Display */}
+        <div className="mb-8 grid md:grid-cols-2 gap-4">
+          <Card>
+            <CardHeader className="pb-3">
               <CardTitle className="text-lg font-semibold">
                 Your Time
               </CardTitle>
@@ -93,7 +92,65 @@ function App() {
                 {getFormattedTimezoneLabel(userTimezone)}
               </p>
             </CardHeader>
-            <CardContent className="flex justify-center pb-8">
+            <CardContent className="text-center">
+              <div className="text-2xl font-mono font-bold tabular-nums text-foreground">
+                {currentTime.toLocaleTimeString('en-US', {
+                  timeZone: userTimezone,
+                  hour12: true,
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit'
+                })}
+              </div>
+              <div className="text-sm text-muted-foreground mt-1">
+                {currentTime.toLocaleDateString('en-US', {
+                  timeZone: userTimezone,
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg font-semibold">
+                Target Time
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                {getFormattedTimezoneLabel(targetTimezone)}
+              </p>
+            </CardHeader>
+            <CardContent className="text-center">
+              <div className="text-2xl font-mono font-bold tabular-nums text-foreground">
+                {currentTime.toLocaleTimeString('en-US', {
+                  timeZone: targetTimezone,
+                  hour12: true,
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit'
+                })}
+              </div>
+              <div className="text-sm text-muted-foreground mt-1">
+                {currentTime.toLocaleDateString('en-US', {
+                  timeZone: targetTimezone,
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Analog Clocks */}
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Local Clock */}
+          <Card className="text-center">
+            <CardContent className="flex justify-center pt-8 pb-8">
               <AnalogClock
                 time={currentTime}
                 timezone={userTimezone}
@@ -105,70 +162,13 @@ function App() {
 
           {/* Target Clock */}
           <Card className="text-center">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold">
-                Target Time
-              </CardTitle>
-              <p className="text-sm text-muted-foreground">
-                {getFormattedTimezoneLabel(targetTimezone)}
-              </p>
-            </CardHeader>
-            <CardContent className="flex justify-center pb-8">
+            <CardContent className="flex justify-center pt-8 pb-8">
               <AnalogClock
                 time={currentTime}
                 timezone={targetTimezone}
                 clockFace={clockFace}
                 size={240}
               />
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Digital Time Display */}
-        <div className="mt-8 grid md:grid-cols-2 gap-4">
-          <Card>
-            <CardContent className="pt-6 text-center">
-              <div className="text-2xl font-mono font-bold tabular-nums text-foreground">
-                {currentTime.toLocaleTimeString('en-US', {
-                  timeZone: userTimezone,
-                  hour12: true,
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  second: '2-digit'
-                })}
-              </div>
-              <div className="text-sm text-muted-foreground mt-1">
-                {currentTime.toLocaleDateString('en-US', {
-                  timeZone: userTimezone,
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6 text-center">
-              <div className="text-2xl font-mono font-bold tabular-nums text-foreground">
-                {currentTime.toLocaleTimeString('en-US', {
-                  timeZone: targetTimezone,
-                  hour12: true,
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  second: '2-digit'
-                })}
-              </div>
-              <div className="text-sm text-muted-foreground mt-1">
-                {currentTime.toLocaleDateString('en-US', {
-                  timeZone: targetTimezone,
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </div>
             </CardContent>
           </Card>
         </div>
