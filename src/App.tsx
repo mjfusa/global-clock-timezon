@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, ArrowCounterClockwise } from '@phosphor-icons/react';
 import { AnimatePresence } from 'framer-motion';
-import { useKV } from '@github/spark/hooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AnalogClock } from '@/components/AnalogClock';
 import { TimezoneSelect } from '@/components/TimezoneSelect';
 import { ClockFaceSelector } from '@/components/ClockFaceSelector';
+import { PersistenceStatus } from '@/components/PersistenceStatus';
 import { getCurrentTimezone, getFormattedTimezoneLabel } from '@/lib/timezone';
 import { ClockFaceType } from '@/lib/clockTypes';
+import { usePersistentState } from '@/hooks/usePersistentState';
 
 function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const detectedTimezone = getCurrentTimezone();
-  const [userTimezone, setUserTimezone] = useKV('user-timezone', detectedTimezone);
-  const [targetTimezone, setTargetTimezone] = useKV('target-timezone', 'UTC');
-  const [clockFace, setClockFace] = useKV<ClockFaceType>('clock-face', 'classic');
+  const [userTimezone, setUserTimezone] = usePersistentState('user-timezone', detectedTimezone);
+  const [targetTimezone, setTargetTimezone] = usePersistentState('target-timezone', 'UTC');
+  const [clockFace, setClockFace] = usePersistentState<ClockFaceType>('clock-face', 'classic');
 
   // Update time every second
   useEffect(() => {
@@ -102,6 +103,9 @@ function App() {
               />
             </CardContent>
           </Card>
+
+          {/* Persistence Status */}
+          <PersistenceStatus />
         </div>
 
         {/* Digital Time Display */}

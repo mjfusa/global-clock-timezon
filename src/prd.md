@@ -15,7 +15,14 @@
 - **User Timezone Override**: Users can override their detected timezone with manual selection
 - **Target Timezone Selection**: Intuitive dropdown with search and categorization
 - **Auto-detection Fallback**: Shows detected timezone when user overrides their selection
-- **Persistent Preferences**: Timezone selections saved between sessions
+- **Reset Functionality**: Quick reset button to return to detected timezone
+- **Persistent Preferences**: Timezone selections saved between sessions using hybrid KV + cookie storage
+
+### Data Persistence & Reliability
+- **Hybrid Storage**: Primary KV storage with cookie fallback for maximum reliability
+- **Cross-Session Persistence**: User preferences maintained across browser sessions
+- **Graceful Degradation**: Continues working even if one storage method fails
+- **Transparency**: Visual indicator shows active storage methods to users
 
 ### Dual Clock Display
 - **Digital Time Display**: Large, readable digital clocks with date information
