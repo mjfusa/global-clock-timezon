@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Button } from '@/components/ui/button';
+import { Download, Spinner } from '@phosphor-icons/react';
 import { toast } from 'sonner';
 
- */
-  const [deferredPrompt, setDef
-  const [isInstalling, setIsInstalling] = useState
-  u
-    const checkInstalled = () => 
+export function InstallButton() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isInstalling, setIsInstalling] = useState(false);
@@ -78,24 +74,25 @@ import { toast } from 'sonner';
     return null;
   }
 
-      {isI
-          <
-        </>
+  return (
+    <Button 
+      onClick={handleInstallClick}
+      disabled={isInstalling}
+      variant="outline"
+      size="sm"
+      className="gap-2"
+    >
+      {isInstalling ? (
         <>
+          <Spinner size={16} className="animate-spin" />
+          Installing...
+        </>
+      ) : (
+        <>
+          <Download size={16} />
           Install App
+        </>
       )}
+    </Button>
   );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

@@ -1,9 +1,13 @@
 // Simple clock icon generator for PWA icons
-function generateClockIcon(size) {
+function generateClockIcon(size: number) {
   const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
   const ctx = canvas.getContext('2d');
+  
+  if (!ctx) {
+    throw new Error('Could not get 2D context from canvas');
+  }
   
   // Background
   ctx.fillStyle = '#8b7355';
@@ -62,7 +66,7 @@ function generateClockIcon(size) {
 
 // Generate all required icon sizes
 const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
-const icons = {};
+const icons: Record<number, HTMLCanvasElement> = {};
 
 sizes.forEach(size => {
   icons[size] = generateClockIcon(size);

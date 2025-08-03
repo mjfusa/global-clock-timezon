@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { WifiSlash, Wifi } from '@phosphor-icons/react';
+import { WifiX, WifiHigh } from '@phosphor-icons/react';
 import { toast } from 'sonner';
 
 /**
@@ -13,14 +13,14 @@ export function NetworkStatus() {
     const handleOnline = () => {
       setIsOnline(true);
       toast.success('Back online!', {
-        icon: <Wifi size={16} />,
+        icon: <WifiHigh size={16} />,
       });
     };
 
     const handleOffline = () => {
       setIsOnline(false);
       toast.warning('You\'re offline. The app will continue to work with cached data.', {
-        icon: <WifiSlash size={16} />,
+        icon: <WifiX size={16} />,
         duration: 5000,
       });
     };
@@ -40,7 +40,7 @@ export function NetworkStatus() {
 
   return (
     <div className="fixed bottom-4 left-4 bg-muted border border-border rounded-lg px-3 py-2 shadow-lg flex items-center gap-2 text-sm">
-      <WifiSlash size={16} className="text-muted-foreground" />
+      <WifiX size={16} className="text-muted-foreground" />
       <span className="text-muted-foreground">Offline mode</span>
     </div>
   );

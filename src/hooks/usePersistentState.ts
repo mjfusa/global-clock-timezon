@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useKV } from '@github/spark/hooks';
-import { setCookieJSON, getCookieJSON, areCookiesEnabled } from '@/lib/cookies';
+import { setCookieJSON, getCookie, areCookiesEnabled } from '@/lib/cookies';
 
 /**
  * Hybrid persistence hook that uses both KV storage (primary) and cookies (fallback)
@@ -12,7 +12,10 @@ export function usePersistentState<T>(
   defaultValue: T
 ): [T, (value: T | ((current: T) => T)) => void, () => void] {
   // Primary storage using KV
-  const [kvValue, setKvValue, deleteKvValue] = useKV(key, defaultValue);
+  const [kvValue, setKvValue, deleteKvValue] = useKV<T>(key, defaultValue);
+  
+  // Ensure kvValue is never undefined by falling back to defaultValue
+  const safeKvValue = kvValue ?? defaultValue;
   
   // Check cookie support - always enabled by default
   const [cookiesSupported] = useState(() => areCookiesEnabled());
@@ -21,17 +24,22 @@ export function usePersistentState<T>(
   useEffect(() => {
     if (!cookiesSupported) return;
     
-    const cookieValue = getCookieJSON(`tz-${key}`, null);
+    const cookieValue = getCookie(`tz-${key}`);
     
-    if (cookieValue !== null && JSON.stringify(kvValue) === JSON.stringify(defaultValue)) {
-      setKvValue(cookieValue);
+    if (cookieValue !== null && JSON.stringify(safeKvValue) === JSON.stringify(defaultValue)) {
+      try {
+        const parsedValue = JSON.parse(cookieValue) as T;
+        setKvValue(parsedValue);
+      } catch (error) {
+        console.warn('Failed to parse cookie value:', error);
+      }
     }
-  }, [cookiesSupported, key, kvValue, defaultValue, setKvValue]);
+  }, [cookiesSupported, key, safeKvValue, defaultValue, setKvValue]);
   
   // Enhanced setter that writes to both storages
   const setValue = useCallback((value: T | ((current: T) => T)) => {
     const newValue = typeof value === 'function' 
-      ? (value as (current: T) => T)(kvValue)
+      ? (value as (current: T) => T)(safeKvValue)
       : value;
     
     // Update KV storage (primary)
@@ -44,7 +52,7 @@ export function usePersistentState<T>(
         sameSite: 'lax'
       });
     }
-  }, [kvValue, setKvValue, key, cookiesSupported]);
+  }, [safeKvValue, setKvValue, key, cookiesSupported]);
   
   // Enhanced delete function
   const deleteValue = useCallback(() => {
@@ -60,5 +68,5 @@ export function usePersistentState<T>(
     }
   }, [deleteKvValue, key, defaultValue, cookiesSupported]);
   
-  return [kvValue, setValue, deleteValue];
+  return [safeKvValue, setValue, deleteValue];
 }

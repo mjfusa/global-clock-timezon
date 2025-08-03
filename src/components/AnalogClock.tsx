@@ -35,7 +35,7 @@ export function AnalogClock({ time, timezone, clockFace, size = 200 }: AnalogClo
   };
 
   const renderHourMarkers = () => {
-    const markers = [];
+    const markers: React.ReactElement[] = [];
     
     for (let i = 0; i < 12; i++) {
       const angle = (i * 30) - 90;
