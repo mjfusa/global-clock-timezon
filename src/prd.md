@@ -21,8 +21,10 @@
 ### Data Persistence & Reliability
 - **Hybrid Storage**: Primary KV storage with cookie fallback for maximum reliability
 - **Cross-Session Persistence**: User preferences maintained across browser sessions
-- **Graceful Degradation**: Continues working even if one storage method fails
-- **Transparency**: Visual indicator shows active storage methods to users
+- **PWA Support**: Full Progressive Web App capabilities with offline functionality
+- **Service Worker Caching**: App works offline with cached resources and data
+- **Install Prompts**: Smart installation suggestions for supported browsers
+- **Graceful Degradation**: Continues working even if one storage method fails or offline
 
 ### Dual Clock Display
 - **Digital Time Display**: Large, readable digital clocks with date information
@@ -37,6 +39,9 @@
 
 ### Layout & Navigation
 - **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **PWA Installation**: Can be installed as a native-like app on mobile and desktop
+- **Offline Functionality**: Core features work without internet connection
+- **Network Status**: Visual feedback when offline with cached data notice
 - **Clear Visual Hierarchy**: Digital clocks positioned above analog clocks for better readability
 - **Intuitive Controls**: All timezone and style selections easily accessible
 
@@ -93,3 +98,9 @@
 - Shows detected timezone as reference when user overrides
 - Maintains persistent timezone preferences across sessions
 - Improved user control over their timezone display
+- **Added Progressive Web App (PWA) support** with:
+  - Service worker for offline functionality and caching
+  - Web app manifest for native-like installation
+  - Install prompts and update notifications
+  - Network status indicators for offline mode
+  - App icons and splash screen support

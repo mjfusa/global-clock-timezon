@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, ArrowCounterClockwise } from '@phosphor-icons/react';
 import { AnimatePresence } from 'framer-motion';
+import { Toaster } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AnalogClock } from '@/components/AnalogClock';
 import { TimezoneSelect } from '@/components/TimezoneSelect';
 import { ClockFaceSelector } from '@/components/ClockFaceSelector';
+import { PWAManager } from '@/components/PWAManager';
+import { NetworkStatus } from '@/components/NetworkStatus';
 
 import { getCurrentTimezone, getFormattedTimezoneLabel } from '@/lib/timezone';
 import { ClockFaceType } from '@/lib/clockTypes';
@@ -29,6 +32,10 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background">
+      <PWAManager />
+      <NetworkStatus />
+      <Toaster position="top-right" richColors />
+      
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8">
