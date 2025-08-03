@@ -49,7 +49,7 @@ function App() {
             Compare times across different zones with beautiful clock faces
           </p>
           <div className="flex items-center justify-center gap-3">
-            <InstallButton />
+            {/* <InstallButton /> */}
             <InstallStatus />
           </div>
         </div>
