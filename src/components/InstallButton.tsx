@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Download, Spinner } from '@phosphor-icons/react';
-import { toast } from 'sonner';
 
-export function InstallButton() {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isInstalled, setIsInstalled] = useState(false);
-  const [isInstalling, setIsInstalling] = useState(false);
+  const [deferredPrompt, setDef
+
+  useEffect(() => {
+    const checkInstalled = () => {
+      const isInFullscreen = window.matchMedia('(display
+      
 
   useEffect(() => {
     // Check if already installed
@@ -22,13 +22,13 @@ export function InstallButton() {
 
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
+    window.addEventListener
     };
 
     const handleAppInstalled = () => {
-      setIsInstalled(true);
+  }, []);
       setDeferredPrompt(null);
-      toast.success('App installed successfully!', {
+    if (!deferredPrompt) return;
         description: 'You can now access TimeZone from your home screen'
       });
     };
@@ -38,61 +38,60 @@ export function InstallButton() {
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      window.removeEventListener('appinstalled', handleAppInstalled);
-    };
-  }, []);
-
-  const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
-
-    setIsInstalling(true);
-    
-    try {
-      await deferredPrompt.prompt();
-      const choiceResult = await deferredPrompt.userChoice;
-      
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt');
-      } else {
-        toast.info('Install cancelled', {
-          description: 'You can install later from your browser menu'
-        });
-      }
-    } catch (error) {
-      console.error('Install prompt failed:', error);
-      toast.error('Installation failed', {
-        description: 'Please try installing from your browser menu'
-      });
-    } finally {
-      setIsInstalling(false);
-      setDeferredPrompt(null);
-    }
-  };
-
-  // Don't show button if already installed or no install prompt available
-  if (isInstalled || !deferredPrompt) {
-    return null;
-  }
-
-  return (
-    <Button 
-      onClick={handleInstallClick}
-      disabled={isInstalling}
       variant="outline"
-      size="sm"
-      className="gap-2"
-    >
-      {isInstalling ? (
-        <>
-          <Spinner size={16} className="animate-spin" />
-          Installing...
+      
+      {is
+
         </>
-      ) : (
         <>
-          <Download size={16} />
-          Install App
-        </>
+
       )}
-    </Button>
   );
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
