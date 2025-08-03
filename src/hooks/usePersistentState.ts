@@ -5,6 +5,7 @@ import { setCookieJSON, getCookieJSON, areCookiesEnabled } from '@/lib/cookies';
 /**
  * Hybrid persistence hook that uses both KV storage (primary) and cookies (fallback)
  * Provides better reliability across different environments and browser states
+ * Cookie backup is enabled by default for better persistence.
  */
 export function usePersistentState<T>(
   key: string,
@@ -13,26 +14,19 @@ export function usePersistentState<T>(
   // Primary storage using KV
   const [kvValue, setKvValue, deleteKvValue] = useKV(key, defaultValue);
   
-  // Track if we've initialized from cookies
-  const [initialized, setInitialized] = useState(false);
-  
-  // Check cookie support on mount
+  // Check cookie support - always enabled by default
   const [cookiesSupported] = useState(() => areCookiesEnabled());
   
-  // Initialize from cookies if KV is empty and cookies are available
+  // Initialize from cookies if available and KV is at default
   useEffect(() => {
-    if (initialized || !cookiesSupported) return;
+    if (!cookiesSupported) return;
     
-    // Only read from cookies if KV appears to be at default value
-    // This prevents overriding intentionally set KV values
     const cookieValue = getCookieJSON(`tz-${key}`, null);
     
     if (cookieValue !== null && JSON.stringify(kvValue) === JSON.stringify(defaultValue)) {
       setKvValue(cookieValue);
     }
-    
-    setInitialized(true);
-  }, [initialized, cookiesSupported, key, kvValue, defaultValue, setKvValue]);
+  }, [cookiesSupported, key, kvValue, defaultValue, setKvValue]);
   
   // Enhanced setter that writes to both storages
   const setValue = useCallback((value: T | ((current: T) => T)) => {
@@ -43,7 +37,7 @@ export function usePersistentState<T>(
     // Update KV storage (primary)
     setKvValue(newValue);
     
-    // Update cookie (fallback) if supported
+    // Update cookie (fallback) - always enabled
     if (cookiesSupported) {
       setCookieJSON(`tz-${key}`, newValue, {
         expires: 365, // 1 year

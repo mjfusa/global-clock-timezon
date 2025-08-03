@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { AnalogClock } from '@/components/AnalogClock';
 import { TimezoneSelect } from '@/components/TimezoneSelect';
 import { ClockFaceSelector } from '@/components/ClockFaceSelector';
-import { PersistenceStatus } from '@/components/PersistenceStatus';
+
 import { getCurrentTimezone, getFormattedTimezoneLabel } from '@/lib/timezone';
 import { ClockFaceType } from '@/lib/clockTypes';
 import { usePersistentState } from '@/hooks/usePersistentState';
@@ -104,8 +104,7 @@ function App() {
             </CardContent>
           </Card>
 
-          {/* Persistence Status */}
-          <PersistenceStatus />
+
         </div>
 
         {/* Digital Time Display */}
